@@ -1,0 +1,105 @@
+
+// 2020/3/21 //
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#define ERROR -1
+typedef int ElementType;
+typedef enum { push, pop, end } Operation;
+typedef int Position;
+typedef struct SNode *PtrToSNode;
+struct SNode {
+    ElementType *Data;  /* 存储元素的数组 */
+    Position Top;       /* 栈顶指针       */
+    int MaxSize;        /* 堆栈最大容量   */
+};
+typedef PtrToSNode Stack;
+
+Stack CreateStack( int MaxSize )
+{
+    Stack S = (Stack)malloc(sizeof(struct SNode));
+    S->Data = (ElementType *)malloc(MaxSize * sizeof(ElementType));
+    S->Top = 0;
+    S->MaxSize = MaxSize;
+
+    system("pause");
+    return S;
+}
+
+bool Push( Stack S, ElementType X );
+ElementType Pop( Stack S );
+
+Operation GetOp()
+{
+    Operation op;
+    scanf("%d", &op);
+    return op;
+}
+
+void PrintStack( Stack S )
+{
+    for(int i = 0; i < S->Top; i++)
+    {
+        printf("%d ", S->Data[i]);
+    }
+    printf("\n");
+}
+
+int main()
+{
+    ElementType X;
+    Stack S;
+    int N, done = 0;
+
+    scanf("%d", &N);
+    S = CreateStack(N);
+    while ( !done ) {
+        switch( GetOp() ) {
+        case push: 
+            scanf("%d", &X);
+            Push(S, X);
+            break;
+        case pop:
+            X = Pop(S);
+            if ( X!=ERROR ) printf("%d is out\n", X);
+            break;
+        case end:
+            PrintStack(S);
+            done = 1;
+            break;
+        }
+    }
+    return 0;
+}
+
+/* 你的代码将被嵌在这里 */
+bool Push( Stack S, ElementType X )
+{
+    if(S->Top == S->MaxSize)
+    {
+        printf("Stack Full\n");
+        return false;
+    }
+    else
+    {
+        S->Data[S->Top] = X;
+        S->Top++;
+        return true;   
+    }
+}
+
+ElementType Pop( Stack S )
+{
+    if(S->Top == 0)
+    {
+        printf("Stack Empty\n");
+        return ERROR;
+    }
+    else
+    {
+        S->Top--;
+        return S->Data[S->Top];
+    }
+}
